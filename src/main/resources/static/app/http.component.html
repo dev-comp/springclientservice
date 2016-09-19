@@ -1,0 +1,36 @@
+<div align="center">
+<table class="ui table users">
+    <thead>
+    <tr>
+      <th>id</th>
+      <th>Пользователь</th>
+      <th>Мессенджер</th>
+      <th align="right">
+          <button class="ui get button" (click)="onTestGet()">Запросить данные</button>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td #checkItemId>{{user.id}}</td>
+      <td>{{user.userName}}</td>
+      <td>{{user.messengerName}}</td>
+      <td>
+        <!--button class="ui btn send">Отправить</button-->
+        <input type="checkbox" class="ui item select" (click)="addItem(user.id,checkItem.checked)" #checkItem/>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div align="center" *ngIf="items.length > 0">
+    <h3>Текст сообщения</h3>
+    <textarea name="comment" cols="40" rows="3" #messageText></textarea>
+<p>
+    <button class="ui send message button">Отправить</button>
+    <button class="ui clear message button" (click)="clearMessage(messageText)">Очистить</button>
+</p>
+
+</div>
+
+</div>

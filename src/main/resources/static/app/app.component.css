@@ -1,0 +1,16 @@
+.ui.segment.form {
+    margin-top: 3rem;
+}
+
+#todos .item {
+    display: flex;
+    align-items: center;
+}
+
+#todos .comleted {
+    text-decoration: line-through;
+}
+
+#todos .button {
+    margin-left: auto;
+}

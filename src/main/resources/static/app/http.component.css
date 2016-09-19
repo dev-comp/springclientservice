@@ -1,0 +1,115 @@
+.button {
+  display: inline-block;
+  width: 15em;
+  font-size: 80%;
+  color: rgba(255,255,255,.9);
+  text-shadow: #2e7ebd 0 1px 2px;
+  text-decoration: none;
+  text-align: center;
+  line-height: 1.1;
+  white-space: pre-line;
+  padding: .7em 0;
+  border: 1px solid;
+  border-color: #60a3d8 #2970a9 #2970a9 #60a3d8;
+  border-radius: 6px;
+  outline: none;
+  background: #60a3d8 linear-gradient(#89bbe2, #60a3d8 50%, #378bce);
+  box-shadow: inset rgba(255,255,255,.5) 1px 1px;
+}
+.button:first-line{
+  font-size: 170%;
+  font-weight: 700;
+}
+.button:hover {
+  color: rgb(255,255,255);
+  background-image: linear-gradient(#9dc7e7, #74afdd 50%, #378bce);
+}
+.button:active {
+  color: rgb(255,255,255);
+  border-color: #2970a9;
+  background-image: linear-gradient(#5796c8, #6aa2ce);
+  box-shadow: none;
+}
+
+
+.ui.table.users {
+  color: #333;
+  font-family: times;
+  font-size: .9em;
+  font-weight: 300;
+  text-align: left;
+  line-height: 40px;
+  border-spacing: 0;
+  border: 2px solid #2970a9;
+  width: 700px;
+  margin: 50px auto;
+  text-indent:10px;
+}
+
+thead tr:first-child {
+  background: #2970a9;
+  color: #fff;
+  border: none;
+}
+
+th {font-weight: bold; text-align: left; font-size: 13pt}
+/*th:first-child, td:first-child {padding: 0 15px 0 20px;}*/
+
+/*thead tr:last-child th {border-bottom: 3px solid #ddd;}*/
+
+tbody tr:hover {background-color: #ffeeff;}
+tbody tr {font-size: 16pt}
+tbody tr:last-child td {border: none}
+tbody td {border-bottom: 1px solid #ddd;}
+
+td:last-child {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.ui.btn.send {
+  color: #fff;
+  padding-right: 5px;
+  cursor: pointer;
+  background-image: linear-gradient(#5796c8, #6aa2ce);
+  border-radius: 6px;
+}
+
+.ui.item.select {
+    height: 30px;
+    width: 30px;
+    border: 1px solid #FF9900;
+    margin: 0px; padding: 15px; font: 15px;
+
+}
+
+textarea {
+  height:auto;
+  max-width:700px;
+  color:#2970a9;
+  font-weight:500;
+  font-size:18px;
+  font-family:'Ubuntu', Helvetica, Arial, sans-serif;
+  width: 700px;
+  background:#fff;
+  border-radius:3px;
+  line-height:2em;
+  border: 1px solid #2970a9;
+  box-shadow:0px 0px 5px 1px rgba(0,0,0,0.1);
+  padding:30px;
+  -webkit-transition: height 2s ease;
+-moz-transition: height 2s ease;
+-ms-transition: height 2s ease;
+-o-transition: height 2s ease;
+transition: height 2s ease;
+}
+
+.ui.send.message.button {
+    position:relative;right:-200;
+    width: 150;
+} 
+
+.ui.clear.message.button {
+    position:relative;right:-200;
+    width: 150;
+} 
