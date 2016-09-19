@@ -1,4 +1,4 @@
-package habraspring;
+package dev_comp;
 
 import org.springframework.web.bind.annotation.*;
 
