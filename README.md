@@ -7,7 +7,7 @@
 
 СБОРКА 
  1. В корневой директории выполняем gradle build
- 2. В корневой директории выполняем gradle bootRun
+ 2. В директории \src\main\resources\static\ выполняем npm install
 
 ЗАПУСК
  1. В корневой директории выполняем gradle bootRun - поднимаем сервис 
