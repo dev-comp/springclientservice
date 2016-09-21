@@ -15,10 +15,21 @@ require('rxjs/Rx');
 var HTTPService = (function () {
     function HTTPService(_http) {
         this._http = _http;
-        this._sUrl = 'http://localhost:8080/hey';
+        this._sUrlGet = 'http://localhost:8080/userlist';
+        this._sUrlPost = 'http://localhost:8080/sendMessage';
     }
     HTTPService.prototype.getUsers = function () {
-        var srv = this._http.get(this._sUrl);
+        var srv = this._http.get(this._sUrlGet);
+        return srv
+            .map(function (res) { return res.json(); })
+            .catch(this.handleError);
+    };
+    HTTPService.prototype.sendToService = function (body) {
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/json');
+        var srv = this._http.post(this._sUrlPost, body, {
+            headers: headers
+        });
         return srv
             .map(function (res) { return res.json(); })
             .catch(this.handleError);

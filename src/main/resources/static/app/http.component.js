@@ -38,6 +38,15 @@ var HTTPComponent = (function () {
     HTTPComponent.prototype.clearMessage = function (text) {
         text.value = "";
     };
+    HTTPComponent.prototype.sendMessage = function (text) {
+        var _this = this;
+        this.postStatus = '';
+        //let userObj = JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота"});
+        //let msgObj = '[' + JSON.stringify({/*"userObject": */userObj, "msgBody":text.value}) + ']';
+        var msgObj = '[' + JSON.stringify({ "userName": "имя юзера", "botEntryName": "имя бота", "msgBody": text.value }) + ']';
+        this._httpService.sendToService(msgObj)
+            .subscribe(function (user) { return _this.users = user; }, function (error) { return alert(error); }, function () { return console.log("Finished"); });
+    };
     HTTPComponent = __decorate([
         core_1.Component({
             selector: 'http-connect',
