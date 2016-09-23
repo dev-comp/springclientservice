@@ -7,18 +7,22 @@ package dev_comp;
 public class UserObject {
 
   private String userName;
-  private String botEntryName;
 
-  public UserObject(String userName, String botEntryName) {
-    this.userName = userName;
-    this.botEntryName = botEntryName;
-  }
+  private String botName;
 
   public String getUserName() {
     return userName;
   }
 
-  public String getBotEntryName() {
-    return botEntryName;
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public String getBotName() {
+    return botName;
+  }
+
+  public void setBotName(String botName) {
+    this.botName = botName;
   }
 }

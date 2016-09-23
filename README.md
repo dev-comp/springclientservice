@@ -6,9 +6,7 @@
  3. Gradle
 
 СБОРКА 
- 1. В корневой директории выполняем gradle build
- 2. В директории \src\main\resources\static\ выполняем npm install
+ В корневой директории выполняем build.bat
 
 ЗАПУСК
- 1. В корневой директории выполняем gradle bootRun - поднимаем сервис 
- 2. Browser: http://localhost:8080/ (по умолчанию, настраиваемо)
+ В корневой директории выполняем start.bat (http://localhost:8080/ - по умолчанию)

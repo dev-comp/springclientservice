@@ -14,7 +14,7 @@
     <tr *ngFor="let user of users">
       <td #checkItemId>{{user.id}}</td>
       <td>{{user.userName}}</td>
-      <td>{{user.botEntryName}}</td>
+      <td>{{user.botName}}</td>
       <td>
         <!--button class="ui btn send">Отправить</button-->
         <input type="checkbox" class="ui item select" (click)="addItem(user.id,checkItem.checked)" #checkItem/>

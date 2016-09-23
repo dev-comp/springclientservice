@@ -43,9 +43,11 @@ var HTTPComponent = (function () {
         this.postStatus = '';
         //let userObj = JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота"});
         //let msgObj = '[' + JSON.stringify({/*"userObject": */userObj, "msgBody":text.value}) + ']';
-        var msgObj = '[' + JSON.stringify({ "userName": "имя юзера", "botEntryName": "имя бота", "msgBody": text.value }) + ']';
-        this._httpService.sendToService(msgObj)
-            .subscribe(function (user) { return _this.users = user; }, function (error) { return alert(error); }, function () { return console.log("Finished"); });
+        //let msgObj = '[' + JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота", "msgBody":text.value}) + ']';
+        var obj = JSON.stringify({ "userIds": this.items, "msgBody": text.value });
+        this._httpService.sendToService(obj)
+            .subscribe(function (postStatus) { return _this.postStatus = postStatus; }, function (error) { return alert(error); }, function () { return console.log("Finished"); });
+        text.value = this.postStatus;
     };
     HTTPComponent = __decorate([
         core_1.Component({

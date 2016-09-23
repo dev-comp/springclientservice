@@ -2,6 +2,7 @@ package dev_comp;
 
 /**
  * Created by diver_000 on 10.09.2016.
+ *
  */
 public class UserInfo {
     private long id;

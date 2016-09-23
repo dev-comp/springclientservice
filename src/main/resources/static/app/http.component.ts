@@ -55,13 +55,17 @@ export class HTTPComponent {
         //let userObj = JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота"});
         //let msgObj = '[' + JSON.stringify({/*"userObject": */userObj, "msgBody":text.value}) + ']';
        
-let msgObj = '[' + JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота", "msgBody":text.value}) + ']';
+//let msgObj = '[' + JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота", "msgBody":text.value}) + ']';
 
-        this._httpService.sendToService(msgObj)
+
+        let obj = JSON.stringify({"userIds":this.items,"msgBody":text.value});
+
+        this._httpService.sendToService(obj)
         .subscribe(
-                user => this.users = <User[]>user,
+                postStatus => this.postStatus = postStatus,
                 error => alert(error),
                 () => console.log("Finished")
             );
+        text.value = this.postStatus;
     }
 }

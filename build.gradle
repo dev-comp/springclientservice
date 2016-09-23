@@ -1,10 +1,11 @@
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'utf-8'
+  }
+
 buildscript {
 	repositories {
-		maven {
-			name 'bft-local'
-			url 'http://jin-server.bft.local:8097/nexus/content/groups/public/'
-		}
-		//mavenCentral()
+		mavenCentral()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
@@ -22,31 +23,26 @@ jar {
 }
 
 repositories {
-	maven {
-		name 'bft-local'
-		url 'http://jin-server.bft.local:8097/nexus/content/groups/public/'
-	} 
-	//mavenCentral()
+	mavenCentral()
 }
 
+def clientport = '8080'
+
 bootRun {
-	systemProperty 'server.port', '8080'
+	systemProperty 'server.port', clientport
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-
 	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework.boot:spring-boot-starter-websocket")
 	compile("org.springframework:spring-messaging")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile("com.google.code.gson:gson:2.+")
-	//testCompile("org.springframework:spring-test")
-	//testCompile("junit:junit")
 }
 
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.3'
-}
+task processResources.dependsOn(':src:main:resources:static:npmInstall')
+
+task start (dependsOn: 'bootRun')
