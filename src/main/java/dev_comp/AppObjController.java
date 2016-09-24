@@ -63,8 +63,6 @@ public class AppObjController {
         }
     }
 
-    //private static String HELLO = "Hello, %s";
-
     HashMap<Long, UserObjectToClient> users = new HashMap<>();
 
     @RequestMapping("/userlist")
@@ -109,7 +107,7 @@ public class AppObjController {
 
     private boolean sendMessageToService(MsgObject messObj) {
         try {
-            URL url = new URL(mapUrls.get(SEND_MESSAGE_TO_MAIN_SERVICE_URL)/*"http://172.21.21.249:8080/botservice/rs/api/sendMsg"*/);
+            URL url = new URL(mapUrls.get(SEND_MESSAGE_TO_MAIN_SERVICE_URL));
             try {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
@@ -139,7 +137,6 @@ public class AppObjController {
         URL url;
         HttpURLConnection conn;
         ArrayList<UserObjectToClient> items = null;
-        //boolean isCool = true;
         try {
             url = new URL(mapUrls.get(GET_USERS_FROM_MAIN_SERVICE_URL)/*"http://172.21.21.249:8080/botservice/rs/api/userKeyList/Sanya"*/);
             conn = (HttpURLConnection) url.openConnection();
@@ -147,6 +144,17 @@ public class AppObjController {
             BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), "Utf-8"));
             Gson gson = new GsonBuilder().create();
             Type itemsArrType = new TypeToken<ArrayList<UserObjectToClient>>() {}.getType();
+
+            /*StringBuilder sb = new StringBuilder("");
+            String line;
+            try {
+                while ((line = buff.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+            } catch (IOException ex){
+                System.out.println(ex);
+            }*/
+
             items = gson.fromJson(buff, itemsArrType);
             buff.close();
         } catch (ConnectException e) {
@@ -154,11 +162,6 @@ public class AppObjController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /*if (!isCool) {
-            items = new ArrayList<>();
-            items.add(new UserObjectToClient(1, "USER_1", "BOT_1"));
-            items.add(new UserObjectToClient(2, "USER_2", "BOT_2"));
-        }*/
         return items;
     }
 
@@ -168,7 +171,7 @@ public class AppObjController {
 
     private String getJoke() {
         if (jokeCount > 0 && jokeCount < JOKE_COUNT_JN_PAGE) {
-            return jokes.getResults().get(jokeCount).getContent();
+            return jokes.getResults().get(jokeCount++).getContent();
         } else {
             //JokeObject items = null;
             URL url;

@@ -52,12 +52,6 @@ export class HTTPComponent {
 
     sendMessage(text: any) {
         this.postStatus = '';
-        //let userObj = JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота"});
-        //let msgObj = '[' + JSON.stringify({/*"userObject": */userObj, "msgBody":text.value}) + ']';
-       
-//let msgObj = '[' + JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота", "msgBody":text.value}) + ']';
-
-
         let obj = JSON.stringify({"userIds":this.items,"msgBody":text.value});
 
         this._httpService.sendToService(obj)
@@ -66,6 +60,7 @@ export class HTTPComponent {
                 error => alert(error),
                 () => console.log("Finished")
             );
-        text.value = this.postStatus;
+        text.value = '';
     }
+
 }

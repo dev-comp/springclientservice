@@ -41,13 +41,10 @@ var HTTPComponent = (function () {
     HTTPComponent.prototype.sendMessage = function (text) {
         var _this = this;
         this.postStatus = '';
-        //let userObj = JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота"});
-        //let msgObj = '[' + JSON.stringify({/*"userObject": */userObj, "msgBody":text.value}) + ']';
-        //let msgObj = '[' + JSON.stringify({"userName":"имя юзера","botEntryName":"имя бота", "msgBody":text.value}) + ']';
         var obj = JSON.stringify({ "userIds": this.items, "msgBody": text.value });
         this._httpService.sendToService(obj)
             .subscribe(function (postStatus) { return _this.postStatus = postStatus; }, function (error) { return alert(error); }, function () { return console.log("Finished"); });
-        text.value = this.postStatus;
+        text.value = '';
     };
     HTTPComponent = __decorate([
         core_1.Component({

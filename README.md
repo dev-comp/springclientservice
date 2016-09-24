@@ -1,12 +1,11 @@
 # springclientservice
 
-ПОДГОТОВКА
- 1. JDK 1.8
- 2. Node.js (npm.cmd)
- 3. Gradle
-
-СБОРКА 
- В корневой директории выполняем build.bat
-
-ЗАПУСК
- В корневой директории выполняем start.bat (http://localhost:8080/ - по умолчанию)
+НАСТРОЙКА
+ 1. Порт сервиса по умолчанию = 8080 (настройка "service_port" файла "gradle.properties")
+ 2. Настрока proxy: 
+  2.1. "gradle.properties" для gradle
+  2.2. "src\main\resources\static\.npmrc" и "src\main\resources\static\.typingsrc" для angular 2
+ 
+СБОРКА/ЗАПУСК 
+ 1. В корневой директории выполнить командный файл "start" или из командной строки/терминала: "gradlew start"
+ 2. http://localhost:{service_port}, где {service_port} - номер порта из настройки (см. п.1. НАСТРОЙКА)

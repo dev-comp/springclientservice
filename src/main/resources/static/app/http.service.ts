@@ -7,7 +7,7 @@ import 'rxjs/Rx';
 export class HTTPService {
     constructor(private _http: Http) {}
 
-    private _sUrlGet = 'http://localhost:8080/userlist';
+    private _sUrlGet = '/userlist';
     getUsers() {   
         let srv = this._http.get(this._sUrlGet); 
         return srv
@@ -15,7 +15,7 @@ export class HTTPService {
             .catch(this.handleError);
     }
 
-    private _sUrlPost = 'http://localhost:8080/sendMessage';
+    private _sUrlPost = '/sendMessage';
     sendToService(body: any) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');

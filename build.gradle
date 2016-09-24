@@ -26,10 +26,8 @@ repositories {
 	mavenCentral()
 }
 
-def clientport = '8080'
-
 bootRun {
-	systemProperty 'server.port', clientport
+	systemProperty 'server.port', service_port
 }
 
 sourceCompatibility = 1.8

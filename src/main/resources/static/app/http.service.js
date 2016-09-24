@@ -15,8 +15,8 @@ require('rxjs/Rx');
 var HTTPService = (function () {
     function HTTPService(_http) {
         this._http = _http;
-        this._sUrlGet = 'http://localhost:8080/userlist';
-        this._sUrlPost = 'http://localhost:8080/sendMessage';
+        this._sUrlGet = '/userlist';
+        this._sUrlPost = '/sendMessage';
     }
     HTTPService.prototype.getUsers = function () {
         var srv = this._http.get(this._sUrlGet);
