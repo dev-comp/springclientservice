@@ -16,7 +16,7 @@ var HTTPComponent = (function () {
         this.users = [];
         this.items = [];
     }
-    HTTPComponent.prototype.onTestGet = function () {
+    HTTPComponent.prototype.onGetUsers = function () {
         var _this = this;
         this.items = [];
         this._httpService.getUsers()

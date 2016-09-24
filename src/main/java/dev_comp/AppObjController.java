@@ -18,7 +18,7 @@ import java.util.Properties;
 import java.util.Random;
 
 /**
- * Created by diver_000 on 10.09.2016.
+ * Created by a.kutakov on 10.09.2016.
  *
  */
 
@@ -26,20 +26,20 @@ import java.util.Random;
 @CrossOrigin()
 public class AppObjController {
 
-    private static String NATIVE_SERVICE_URL = "native_service_url";
-    private static String MAIN_SERVICE_URL = "main_service_url";
-    private static String GET_USERS_FROM_NATIVE_SERVICE_URL = "get_users_from_native_service_url";
-    private static String GET_USERS_FROM_MAIN_SERVICE_URL = "get_users_from_main_service_url";
-    private static String INCOMING_MESSAGE_FROM_MAIN_SERVICE_URL = "incoming_message_from_main_service_url";
-    private static String SEND_MESSAGE_TO_MAIN_SERVICE_URL = "send_message_to_main_service_url";
-    private static String GET_JOKES_FROM_FOREIGN_SERVICE = "get_jokes_from_foreign_service";
+    public static final String CMD_JOKE = "/JOKE";
+    public static String GET_USERS_FROM_MAIN_SERVICE_URL = "get_users_from_main_service_url";
+    public static String SEND_MESSAGE_TO_MAIN_SERVICE_URL = "send_message_to_main_service_url";
+    public static String GET_JOKES_FROM_FOREIGN_SERVICE = "get_jokes_from_foreign_service";
 
-    public static int JOKE_COUNT_JN_PAGE = 10;
+    public static final String UTF_8 = "Utf-8";
+    public static int JOKE_COUNT_IN_PAGE = 10;
 
-    static HashMap<String, String> mapUrls = new HashMap<>();
-    JokeObject jokes;
+    private static HashMap<String, String> mapUrls = new HashMap<>();
+    private JokeObject jokes;
     private int jokeCount = 0;
 
+
+    public static final String APP_SETTINGS_JSON_FILE_PATH = "/static/app_settings.json";
 
     static {
         String proxy = "proxy.bftcom.com";
@@ -51,7 +51,7 @@ public class AppObjController {
         BufferedReader buff = null;
         try {
             buff = new BufferedReader(
-                new InputStreamReader(Application.class.getResourceAsStream("/static/app_settings.json"), "Utf-8")
+                new InputStreamReader(Application.class.getResourceAsStream(APP_SETTINGS_JSON_FILE_PATH), UTF_8)
             );
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -82,7 +82,7 @@ public class AppObjController {
 
     @RequestMapping(value = "/msg", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public MsgObject msg(@RequestBody MsgObject msg) {
-        if ("/JOKE".equals(msg.getMsgBody().trim().toUpperCase())) {
+        if (CMD_JOKE.equals(msg.getMsgBody().trim().toUpperCase())) {
             msg.setMsgBody(getJoke());
         }
         msg.setMsgBody("Bot answer: \n" + msg.getMsgBody());
@@ -111,12 +111,12 @@ public class AppObjController {
             try {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
-                conn.setRequestProperty("Accept-Charset", "UTF-8");
-                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Accept-Charset", UTF_8);
+                conn.setRequestProperty("Content-Type", "application/json; charset=" + UTF_8);
+                    conn.setRequestMethod("POST");
 
                 Gson gson = new GsonBuilder().create();
-                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), "Utf-8");
+                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), UTF_8);
                 out.write(gson.toJson(messObj));
                 out.close();
 
@@ -138,10 +138,10 @@ public class AppObjController {
         HttpURLConnection conn;
         ArrayList<UserObjectToClient> items = null;
         try {
-            url = new URL(mapUrls.get(GET_USERS_FROM_MAIN_SERVICE_URL)/*"http://172.21.21.249:8080/botservice/rs/api/userKeyList/Sanya"*/);
+            url = new URL(mapUrls.get(GET_USERS_FROM_MAIN_SERVICE_URL));
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), "Utf-8"));
+            BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), UTF_8));
             Gson gson = new GsonBuilder().create();
             Type itemsArrType = new TypeToken<ArrayList<UserObjectToClient>>() {}.getType();
 
@@ -166,24 +166,84 @@ public class AppObjController {
     }
 
 
+    @RequestMapping("/userKeyLog")
+    public String userKeyLog(@RequestParam(value="id") Long id) {
+        UserObjectToClient uot = users.get(id);
+        UserObject uo = new UserObject();
+        uo.setBotName(uot.getBotName());
+        uo.setUserName(uot.getUserName());
+        return getMessageFromService(uo);
+    }
+
+
+
+    private String getMessageFromService(UserObject userObj) {
+        String res = "";
+        try {
+            URL url = new URL("http://172.21.21.249:8080/botservice/rs/api/userKeyLog");
+            try {
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+                conn.setRequestProperty("Accept-Charset", UTF_8);
+                conn.setRequestProperty("Content-Type", "application/json; charset=" + UTF_8);
+                conn.setRequestMethod("POST");
+
+                Gson gson = new GsonBuilder().create();
+                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), UTF_8);
+                out.write(gson.toJson(userObj));
+                out.close();
+
+                BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), UTF_8));
+                //Type itemsArrType = new TypeToken<ArrayList<UserObjectToClient>>() {}.getType();
+
+                StringBuilder sb = new StringBuilder("");
+                String line;
+                try {
+                    while ((line = buff.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+                } catch (IOException ex) {
+                    System.out.println(ex);
+                }
+
+
+                res = gson.fromJson(sb.toString(), String.class);
+
+                buff.close();
+                int HttpResult = conn.getResponseCode();
+                //HttpResult == HttpURLConnection.HTTP_OK;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
+
+
 
     //////////---------------------------------
 
     private String getJoke() {
-        if (jokeCount > 0 && jokeCount < JOKE_COUNT_JN_PAGE) {
+        if (jokeCount > 0 && jokeCount < JOKE_COUNT_IN_PAGE) {
             return jokes.getResults().get(jokeCount++).getContent();
         } else {
             //JokeObject items = null;
             URL url;
             HttpURLConnection conn;
             try {
-                url = new URL(getJokeUrl()/*"http://boroda.wonderland.zone/post/?page=300"*/);
+                url = new URL(getJokeUrl());
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestProperty("Accept", "application/json");
                 conn.connect();
-                BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), "Utf-8"));
+                BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), UTF_8));
 
                 Gson gson = new GsonBuilder().create();
                 //items = gson.fromJson(buff, JokeObject.class);

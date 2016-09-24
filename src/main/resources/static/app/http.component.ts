@@ -22,7 +22,7 @@ export class HTTPComponent {
         this.items = [];
     }
 
-    onTestGet() {
+    onGetUsers() {
         this.items = [];
         this._httpService.getUsers()
             .subscribe(
