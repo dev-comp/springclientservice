@@ -14,7 +14,7 @@ export class HTTPComponent {
     getData: String;
     users: User[];
     items: number[];
-    postStatus: String;
+    postStatus: boolean;
     
 
     constructor(private _httpService: HTTPService) {
@@ -51,16 +51,24 @@ export class HTTPComponent {
     }
 
     sendMessage(text: any) {
-        this.postStatus = '';
+        this.postStatus = false;
         let obj = JSON.stringify({"userIds":this.items,"msgBody":text.value});
 
         this._httpService.sendToService(obj)
         .subscribe(
-                postStatus => this.postStatus = postStatus,
+                (postStatus: boolean) => {
+                    this.postStatus = postStatus;
+                    if (postStatus) {
+                      text.value = '';
+                    } else {
+                      alert('Ошибка при отправки сообщения');  
+                    }
+                },
+                //postStatus => this.postStatus = postStatus,
                 error => alert(error),
                 () => console.log("Finished")
             );
-        text.value = '';
+        
     }
 
 }
