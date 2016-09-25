@@ -140,8 +140,11 @@ public class AppObjController {
         try {
             url = new URL(mapUrls.get(GET_USERS_FROM_MAIN_SERVICE_URL));
             conn = (HttpURLConnection) url.openConnection();
+            conn.setUseCaches(false);
             conn.setRequestMethod("GET");
+            conn.connect();
             BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), UTF_8));
+
             Gson gson = new GsonBuilder().create();
             Type itemsArrType = new TypeToken<ArrayList<UserObjectToClient>>() {}.getType();
 
@@ -233,7 +236,7 @@ public class AppObjController {
         if (jokeCount > 0 && jokeCount < JOKE_COUNT_IN_PAGE) {
             return jokes.getResults().get(jokeCount++).getContent();
         } else {
-            //JokeObject items = null;
+            jokeCount = 0;
             URL url;
             HttpURLConnection conn;
             try {
