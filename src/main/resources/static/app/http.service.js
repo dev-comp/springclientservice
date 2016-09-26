@@ -16,18 +16,26 @@ var HTTPService = (function () {
     function HTTPService(_http) {
         this._http = _http;
         this._sUrlGet = '/userlist';
-        this._sUrlPost = '/sendMessage';
     }
     HTTPService.prototype.getUsers = function () {
-        var srv = this._http.get(this._sUrlGet);
+        return this.getDataFromService(this._sUrlGet);
+    };
+    HTTPService.prototype.getDataFromService = function (addr) {
+        var srv = this._http.get(addr);
         return srv
             .map(function (res) { return res.json(); })
             .catch(this.handleError);
     };
-    HTTPService.prototype.sendToService = function (body) {
+    HTTPService.prototype.getDataFromServiceTxt = function (addr) {
+        var srv = this._http.get(addr);
+        return srv
+            .map(function (res) { return res; })
+            .catch(this.handleError);
+    };
+    HTTPService.prototype.sendToService = function (body, addr) {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
-        var srv = this._http.post(this._sUrlPost, body, {
+        var srv = this._http.post(addr, body, {
             headers: headers
         });
         return srv

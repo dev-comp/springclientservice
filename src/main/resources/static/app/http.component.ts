@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {HTTPService} from './http.service';
 import {User} from './app.component.user';
+import {Response} from '@angular/http';
 
 @Component({
     selector: 'http-connect',
@@ -15,6 +16,8 @@ export class HTTPComponent {
     users: User[];
     items: number[];
     postStatus: boolean;
+    linkUserHistory: User;
+    historyMsg: Response;
     
 
     constructor(private _httpService: HTTPService) {
@@ -50,11 +53,11 @@ export class HTTPComponent {
         text.value = "";
     }
 
+    private _sUrlPost_sendMsg = '/sendMessage';
     sendMessage(text: any) {
         this.postStatus = false;
         let obj = JSON.stringify({"userIds":this.items,"msgBody":text.value});
-
-        this._httpService.sendToService(obj)
+        this._httpService.sendToService(obj, this._sUrlPost_sendMsg)
         .subscribe(
                 (postStatus: boolean) => {
                     this.postStatus = postStatus;
@@ -70,5 +73,28 @@ export class HTTPComponent {
             );
         
     }
+
+    private _sUrlPost_getMsg = '/userKeyLog';
+    saveLinkUser(usr: User, messageStory: any) {
+        //this.historyMsg = "";
+        if (!this.linkUserHistory) {
+          this.linkUserHistory = usr;
+
+            this._httpService.getDataFromServiceTxt(this._sUrlPost_getMsg + '?id=' + usr.id)
+                .subscribe(
+                    (msg: Response) => {
+                        this.historyMsg = msg;
+                    },
+                    error => alert(error),
+                    () => console.log("Finished")
+                );
+
+
+        } else {
+          this.linkUserHistory = null;
+        }  
+
+    }
+
 
 }

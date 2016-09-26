@@ -13,6 +13,8 @@ var http_service_1 = require('./http.service');
 var HTTPComponent = (function () {
     function HTTPComponent(_httpService) {
         this._httpService = _httpService;
+        this._sUrlPost_sendMsg = '/sendMessage';
+        this._sUrlPost_getMsg = '/userKeyLog';
         this.users = [];
         this.items = [];
     }
@@ -40,11 +42,38 @@ var HTTPComponent = (function () {
     };
     HTTPComponent.prototype.sendMessage = function (text) {
         var _this = this;
-        this.postStatus = '';
+        this.postStatus = false;
         var obj = JSON.stringify({ "userIds": this.items, "msgBody": text.value });
-        this._httpService.sendToService(obj)
-            .subscribe(function (postStatus) { return _this.postStatus = postStatus; }, function (error) { return alert(error); }, function () { return console.log("Finished"); });
-        text.value = '';
+        this._httpService.sendToService(obj, this._sUrlPost_sendMsg)
+            .subscribe(function (postStatus) {
+            _this.postStatus = postStatus;
+            if (postStatus) {
+                text.value = '';
+            }
+            else {
+                alert('Ошибка при отправки сообщения');
+            }
+        }, 
+        //postStatus => this.postStatus = postStatus,
+        function (error) { return alert(error); }, function () { return console.log("Finished"); });
+    };
+    HTTPComponent.prototype.onKeyUp = function (btnSend, btnClear, editText) {
+        btnSend.disabled = editText.value.length == 0;
+        btnClear.disabled = editText.value.length == 0;
+    };
+    HTTPComponent.prototype.saveLinkUser = function (usr, messageStory) {
+        var _this = this;
+        //this.historyMsg = "";
+        if (!this.linkUserHistory) {
+            this.linkUserHistory = usr;
+            this._httpService.getDataFromServiceTxt(this._sUrlPost_getMsg + '?id=' + usr.id)
+                .subscribe(function (msg) {
+                _this.historyMsg = msg;
+            }, function (error) { return alert(error); }, function () { return console.log("Finished"); });
+        }
+        else {
+            this.linkUserHistory = null;
+        }
     };
     HTTPComponent = __decorate([
         core_1.Component({

@@ -1,7 +1,7 @@
 {
-  "name": "angular2-template",
+  "name": "angular2-BOT",
   "version": "1.0.0",
-  "description": "Angular 2 template app",
+  "description": "Клиентское приложение",
   "scripts": {
     "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lint": "tslint ./app/**/*.ts -t verbose",

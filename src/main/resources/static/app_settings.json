@@ -1,15 +1,9 @@
 {
-	"native_service_url" : "http://localhost:8080"
-	,
-	"main_service_url" : "http://172.21.21.249:8080"
-	,
-	"get_users_from_native_service_url" : "http://localhost:8080/userlist"
-	,
 	"get_users_from_main_service_url" : "http://172.21.21.249:8080/botservice/rs/api/userKeyList/Sanya"
-	,
-	"incoming_message_from_main_service_url" : "http://localhost:8080/msg"
 	,
 	"send_message_to_main_service_url" : "http://172.21.21.249:8080/botservice/rs/api/sendMsg"
 	,
 	"get_jokes_from_foreign_service" : "http://boroda.wonderland.zone/post/?page={pageGen}"
+  	,
+  	"get_message_history_by_user" : "http://172.21.21.249:8080/botservice/rs/api/userKeyLog"
 }

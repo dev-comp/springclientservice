@@ -8,19 +8,29 @@ export class HTTPService {
     constructor(private _http: Http) {}
 
     private _sUrlGet = '/userlist';
-    getUsers() {   
-        let srv = this._http.get(this._sUrlGet); 
+    getUsers() {
+        return this.getDataFromService(this._sUrlGet);   
+    }
+
+    getDataFromService(addr: any) {   
+        let srv = this._http.get(addr); 
         return srv
             .map(res => res.json())
             .catch(this.handleError);
     }
 
-    private _sUrlPost = '/sendMessage';
-    sendToService(body: any) {
+    getDataFromServiceTxt(addr: any) {   
+        let srv = this._http.get(addr); 
+        return srv
+            .map(res => res)
+            .catch(this.handleError);
+    }
+
+    sendToService(body: any, addr: any) {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         
-        let srv = this._http.post(this._sUrlPost, body, {
+        let srv = this._http.post(addr, body, {
             headers: headers
         }); 
         return srv

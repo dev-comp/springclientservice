@@ -1,5 +1,5 @@
 <div align="center">
-<table class="ui table users">
+<table class="ui table users" cellpadding="5">
     <thead>
     <tr>
       <th>id</th>
@@ -11,10 +11,14 @@
       </th>
     </tr>
     </thead>
-    <tbody>
-    <tr *ngFor="let user of users">
+    <tbody *ngFor="let user of users">
+    <tr>
       <td #checkItemId>{{user.id}}</td>
-      <td><a href="./app/app.component.user.message.html" target="_blank" title="История сообщений"><img src="./mess.png" width="30" height="30" alt="lorem"></a></td>
+      <td>
+        <a title="История сообщений">
+          <img src="./mess.png" width="30" height="30" alt="lorem" (click)="saveLinkUser(user, messageStory)">
+        </a>
+      </td>
       <td>{{user.userName}}</td>
       <td>{{user.botName}}</td>
       <td>
@@ -22,15 +26,25 @@
         <input type="checkbox" class="ui item select" (click)="addItem(user.id,checkItem.checked)" #checkItem/>
       </td>
     </tr>
+
+    <tr *ngIf="linkUserHistory==user">
+      <td colspan="5">
+        <div *ngIf="historyMsg">
+		      <textarea class="ui msg" name="usermessage" cols="40" rows="4">{{historyMsg._body}}</textarea>
+        </div>  
+	  </td>
+	  
+    </tr>
+
   </tbody>
 </table>
 
 <div align="center" *ngIf="items.length > 0">
     <h3>Текст сообщения</h3>
-    <textarea name="comment" cols="40" rows="3" #messageText></textarea>
+    <textarea disable class="ui txt" name="comment" cols="40" rows="3" (keyup.control.enter)="sendMessage(messageText)" #messageText></textarea>
 <p>
-    <button class="ui send message button" (click)="sendMessage(messageText)">Отправить</button>
-    <button class="ui clear message button" (click)="clearMessage(messageText)">Очистить</button>
+    <button class="ui send message button" (click)="sendMessage(messageText)" #btnSend>Отправить</button>
+    <button class="ui clear message button" (click)="clearMessage(messageText)" #btnClear>Очистить</button>
 </p>
 
 </div>

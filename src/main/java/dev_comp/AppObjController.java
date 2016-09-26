@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.Random;
+import java.net.*;
+import java.util.*;
 
 /**
  * Created by a.kutakov on 10.09.2016.
@@ -30,9 +24,14 @@ public class AppObjController {
     public static String GET_USERS_FROM_MAIN_SERVICE_URL = "get_users_from_main_service_url";
     public static String SEND_MESSAGE_TO_MAIN_SERVICE_URL = "send_message_to_main_service_url";
     public static String GET_JOKES_FROM_FOREIGN_SERVICE = "get_jokes_from_foreign_service";
+    public static String GET_MESSAGE_HISTORY_BY_USER = "get_message_history_by_user";
+
 
     public static final String UTF_8 = "Utf-8";
     public static int JOKE_COUNT_IN_PAGE = 10;
+
+    public static String TO_USER = "TO_USER";
+    public static String TO_CLIENT_APP = "TO_CLIENT_APP";
 
     private static HashMap<String, String> mapUrls = new HashMap<>();
     private JokeObject jokes;
@@ -113,7 +112,7 @@ public class AppObjController {
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Accept-Charset", UTF_8);
                 conn.setRequestProperty("Content-Type", "application/json; charset=" + UTF_8);
-                    conn.setRequestMethod("POST");
+                conn.setRequestMethod("POST");
 
                 Gson gson = new GsonBuilder().create();
                 OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), UTF_8);
@@ -148,16 +147,6 @@ public class AppObjController {
             Gson gson = new GsonBuilder().create();
             Type itemsArrType = new TypeToken<ArrayList<UserObjectToClient>>() {}.getType();
 
-            /*StringBuilder sb = new StringBuilder("");
-            String line;
-            try {
-                while ((line = buff.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-            } catch (IOException ex){
-                System.out.println(ex);
-            }*/
-
             items = gson.fromJson(buff, itemsArrType);
             buff.close();
         } catch (ConnectException e) {
@@ -181,41 +170,29 @@ public class AppObjController {
 
 
     private String getMessageFromService(UserObject userObj) {
-        String res = "";
+        String mess = "";
         try {
-            URL url = new URL("http://172.21.21.249:8080/botservice/rs/api/userKeyLog");
+            URL url = new URL(mapUrls.get(GET_MESSAGE_HISTORY_BY_USER));
             try {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
-                conn.setRequestProperty("Accept-Charset", UTF_8);
-                conn.setRequestProperty("Content-Type", "application/json; charset=" + UTF_8);
+                conn.setUseCaches(false);
+                conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestMethod("POST");
+                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), UTF_8);
 
                 Gson gson = new GsonBuilder().create();
-                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream(), UTF_8);
                 out.write(gson.toJson(userObj));
                 out.close();
-
                 BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), UTF_8));
-                //Type itemsArrType = new TypeToken<ArrayList<UserObjectToClient>>() {}.getType();
+                Type itemsArrType = new TypeToken<ArrayList<LogObject>>() {}.getType();
 
-                StringBuilder sb = new StringBuilder("");
-                String line;
-                try {
-                    while ((line = buff.readLine()) != null) {
-                        sb.append(line).append("\n");
-                    }
-                } catch (IOException ex) {
-                    System.out.println(ex);
-                }
+                ArrayList<LogObject> res = gson.fromJson(buff, itemsArrType);
 
-
-                res = gson.fromJson(sb.toString(), String.class);
+                mess = getTextMessage(res);
 
                 buff.close();
-                int HttpResult = conn.getResponseCode();
-                //HttpResult == HttpURLConnection.HTTP_OK;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -223,11 +200,32 @@ public class AppObjController {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return res;
+        return mess;
     }
 
+    private String getTextMessage(ArrayList<LogObject> log) {
+        StringBuilder sb = new StringBuilder();
+        if (log != null) {
+            for (final LogObject lg : log) {
+                MsgObject msg = lg.getMsgObject();
+                    UserObject usr = msg.getUserObject();
+                final String userName = "\"" + usr.getUserName().trim() + "\"";
+                final String botName = "\"" + usr.getBotName().trim() + "\"";
+                if (sb.length() > 0) {
+                    sb.append("\n\n");
+                }
+                if (TO_CLIENT_APP.equals(msg.getDirectionType())) {
+                    sb.append(userName).append(" TO ").append(botName).append(" :");
+                } else {
+                    sb.append(botName).append(" TO ").append(userName).append(" :");
+                }
+                sb.append("\n").append(msg.getMsgBody());
 
+            }
 
+        }
+        return sb.toString();
+    }
 
 
     //////////---------------------------------
@@ -249,7 +247,6 @@ public class AppObjController {
                 BufferedReader buff = new BufferedReader(new InputStreamReader(conn.getInputStream(), UTF_8));
 
                 Gson gson = new GsonBuilder().create();
-                //items = gson.fromJson(buff, JokeObject.class);
                 jokes = gson.fromJson(buff, JokeObject.class);
                 buff.close();
             } catch (ConnectException e) {
@@ -260,7 +257,6 @@ public class AppObjController {
             if (jokes != null) {
                 Joke joke = jokes.getResults().get(jokeCount);
                 jokeCount++;
-                //Joke joke = items.getResults().get((new Random().nextInt(10)));
                 return joke.getContent();
             }
             return "No Joke, sorry";

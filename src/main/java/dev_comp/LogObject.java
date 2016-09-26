@@ -1,7 +1,5 @@
 package dev_comp;
 
-import java.util.Date;
-
 /**
  * Created by a.kutakov on 24.09.2016.
  *
@@ -10,7 +8,7 @@ public class LogObject {
 
   private MsgObject msgObject;
 
-  private Date msgTime;
+  private Long msgTime;
 
   public MsgObject getMsgObject() {
     return msgObject;
@@ -20,11 +18,11 @@ public class LogObject {
     this.msgObject = msgObject;
   }
 
-  public Date getMsgTime() {
+  public Long getMsgTime() {
     return msgTime;
   }
 
-  public void setMsgTime(Date msgTime) {
+  public void setMsgTime(Long msgTime) {
     this.msgTime = msgTime;
   }
 
