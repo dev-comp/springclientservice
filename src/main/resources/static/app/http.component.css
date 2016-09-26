@@ -119,11 +119,11 @@ td:last-child {
 }
 
 .ui.send.message.button {
-    position:relative;right:-200;
+    position:relative;right:-250;
     width: 150;
 } 
 
 .ui.clear.message.button {
-    position:relative;right:-200;
+    position:relative;right:-250;
     width: 150;
 } 
