@@ -76,6 +76,10 @@ public class AppObjController {
                 obj.setId(num);
             }
         }
+        if (usrList == null) {
+            usrList = new ArrayList<>();
+        }
+
         return usrList;
     }
 
